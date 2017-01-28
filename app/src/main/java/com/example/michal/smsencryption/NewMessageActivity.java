@@ -1,5 +1,12 @@
 package com.example.michal.smsencryption;
 
+
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+
 import android.Manifest;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,17 +24,20 @@ import android.widget.Button;
 import android.content.pm.PackageManager;
 import android.widget.EditText;
 import android.widget.Toast;
-public class MainActivity extends AppCompatActivity {
 
-    Button buttonSend;
+
+public class NewMessageActivity extends AppCompatActivity {
+
+
+	Button buttonSend;
     EditText textPhoneNo;
     EditText textSMS;
     EditText textPassword;
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_new_message);
+
         Log.e("aaa",""+(-9%7));
         buttonSend = (Button) findViewById(R.id.buttonSend);
         textPhoneNo = (EditText) findViewById(R.id.editTextPhoneNo);
@@ -66,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String phoneNo = textPhoneNo.getText().toString();
-                String sms = EncryptMessage(textSMS.getText().toString(),textPassword.getText().toString());
+                String sms = Encryption.EncryptMessage(textSMS.getText().toString(),textPassword.getText().toString());
 
                 for(int i=0;i<sms.length();i++)
                 {
@@ -92,52 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public String EncryptMessage(String message,String password)
-    {
-        int len=password.length();
-        String encrypted="";
-        if(len==0)
-        {
-            return message;
-        }
-        for(int i=0;i<message.length();i++)
-        {
-            if(message.charAt(i)<32||message.charAt(i)>127)
-                encrypted+=message.charAt(i);
-            else
-                encrypted+=(char)((message.charAt(i)-32+password.charAt(i%len))%95+32);
-        }
-        return encrypted;
-    }
-    public String DecryptMessage(String message,String password)
-    {
-        int len=password.length();
-        String encrypted="";
-        if(len==0)
-        {
-            return message;
-        }
-        for(int i=0;i<message.length();i++)
-        {
-            if(message.charAt(i)<32||message.charAt(i)>127)
-                encrypted+=message.charAt(i);
-            else
-            {
-                char res=message.charAt(i);
-                res-=32;
-                res+=(95-password.charAt(i%len)%95);
-                res=(char)(res%95);
-                res+=32;
-                encrypted+=res;
-            }
-        }
-        return encrypted;
-    }
-    private int mod(int a,int n)
-    {
-        int result = a%n;
-        if(a<0)
-            return result+n;
-        else return result;
-    }
+
+
 }
