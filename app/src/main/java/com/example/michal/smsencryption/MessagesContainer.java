@@ -14,8 +14,9 @@ import java.util.ArrayList;
 
 public final class MessagesContainer {
     private static MessageReceivedListener messageReceivedListener;
-    private static ArrayList<Message> messages = new ArrayList<Message>();
+    public static ArrayList<Message> messages = new ArrayList<Message>();
     public static ArrayList<String> authors=new ArrayList<>();
+    public static ArrayList<String> texts=new ArrayList<>();
     public static void add(String text,String author) {
 
 
@@ -23,6 +24,7 @@ public final class MessagesContainer {
 
         messages.add(new Message(text,author));
         authors.add(author);
+        texts.add(text);
         try {
             handleNewMessage(text, author);
         }

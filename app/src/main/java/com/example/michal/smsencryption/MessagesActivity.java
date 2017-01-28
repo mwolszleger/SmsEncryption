@@ -30,6 +30,7 @@ public class MessagesActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, MessagesContainer.authors);
         listView = (ListView)findViewById(R.id.messagesList);
         listView.setAdapter(adapter);
+        SharedPreferencesHandling.read(this);
         adapter.notifyDataSetChanged();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
