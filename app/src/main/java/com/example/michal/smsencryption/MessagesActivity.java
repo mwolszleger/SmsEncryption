@@ -60,6 +60,9 @@ public class MessagesActivity extends AppCompatActivity {
 
 
     }
+
+
+
     public void newMessage(View view) {
         Intent intent_newMessage = new Intent(this, NewMessageActivity.class);
         startActivity(intent_newMessage);
