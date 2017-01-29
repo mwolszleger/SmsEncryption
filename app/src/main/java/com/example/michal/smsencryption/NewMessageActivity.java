@@ -1,5 +1,12 @@
 package com.example.michal.smsencryption;
 
+
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+
 import android.Manifest;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,20 +24,26 @@ import android.widget.Button;
 import android.content.pm.PackageManager;
 import android.widget.EditText;
 import android.widget.Toast;
-public class MainActivity extends AppCompatActivity {
 
-    Button buttonSend;
+import java.util.ArrayList;
+
+
+public class NewMessageActivity extends AppCompatActivity {
+
+
+	Button buttonSend;
     EditText textPhoneNo;
     EditText textSMS;
     EditText textPassword;
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.e("aaa",""+(-9%7));
+        setContentView(R.layout.activity_new_message);
+
+
         buttonSend = (Button) findViewById(R.id.buttonSend);
         textPhoneNo = (EditText) findViewById(R.id.editTextPhoneNo);
+        textPhoneNo.setText( getIntent().getStringExtra("AUTHOR"));
         textSMS = (EditText) findViewById(R.id.editTextSMS);
         textPassword = (EditText) findViewById(R.id.editTextPassword);
         int permissionCheck = ContextCompat.checkSelfPermission(this,
@@ -66,25 +79,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String phoneNo = textPhoneNo.getText().toString();
-                String sms = EncryptMessage(textSMS.getText().toString(),textPassword.getText().toString());
+                String sms = Encryption.EncryptMessage(textSMS.getText().toString(),textPassword.getText().toString());
 
-                for(int i=0;i<sms.length();i++)
-                {
-                    Log.e("oryginal",textSMS.getText().toString().charAt(i)+"");
-                    Log.e("oryginalNumber",(int)(textSMS.getText().toString().charAt(i))+"");
-                    Log.e("encrypted",sms.charAt(i)+"");
-                    Log.e("encryptedNumner",(int)(sms.charAt(i))+"");
 
-                }
                 try {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+                    ArrayList<String> parts = smsManager.divideMessage(sms);
+                    smsManager.sendMultipartTextMessage(phoneNo, null, parts, null, null);
                     Toast.makeText(getApplicationContext(), "SMS Sent!",
                             Toast.LENGTH_LONG).show();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(),
-                            "SMS faild, please try again later!"+e.getMessage(),
+                            e.getMessage(),
                             Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -92,52 +99,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public String EncryptMessage(String message,String password)
-    {
-        int len=password.length();
-        String encrypted="";
-        if(len==0)
-        {
-            return message;
-        }
-        for(int i=0;i<message.length();i++)
-        {
-            if(message.charAt(i)<32||message.charAt(i)>127)
-                encrypted+=message.charAt(i);
-            else
-                encrypted+=(char)((message.charAt(i)-32+password.charAt(i%len))%95+32);
-        }
-        return encrypted;
-    }
-    public String DecryptMessage(String message,String password)
-    {
-        int len=password.length();
-        String encrypted="";
-        if(len==0)
-        {
-            return message;
-        }
-        for(int i=0;i<message.length();i++)
-        {
-            if(message.charAt(i)<32||message.charAt(i)>127)
-                encrypted+=message.charAt(i);
-            else
-            {
-                char res=message.charAt(i);
-                res-=32;
-                res+=(95-password.charAt(i%len)%95);
-                res=(char)(res%95);
-                res+=32;
-                encrypted+=res;
-            }
-        }
-        return encrypted;
-    }
-    private int mod(int a,int n)
-    {
-        int result = a%n;
-        if(a<0)
-            return result+n;
-        else return result;
-    }
+
+
 }
