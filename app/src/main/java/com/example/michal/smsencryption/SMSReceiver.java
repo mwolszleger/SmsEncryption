@@ -32,20 +32,22 @@ public class SMSReceiver extends BroadcastReceiver {
     public void onReceive(Context arg0, Intent arg1) {
         Bundle bundle = arg1.getExtras();
         SmsMessage[] msgs = null;
-        String wiadomosc = "";
+
         Object[] pdus = (Object[]) bundle.get("pdus");
         msgs = new SmsMessage[pdus.length];
-
+        String message="";
+        String author="";
         for (int x = 0; x < msgs.length; x++) {
             msgs[x] = SmsMessage.createFromPdu((byte[]) pdus[x]);
             //wiadomosc = msgs[x].getOriginatingAddress();
 
             SharedPreferencesHandling.read(arg0);
+            author=msgs[x].getOriginatingAddress();
+            message+=msgs[x].getMessageBody();
 
-
-            MessagesContainer.add(msgs[x].getMessageBody(),msgs[x].getOriginatingAddress());
-            SharedPreferencesHandling.save(msgs[x].getMessageBody(),msgs[x].getOriginatingAddress(),arg0);
         }
+        MessagesContainer.add(message,author);
+        SharedPreferencesHandling.save(message,author,arg0);
     }
 
 }

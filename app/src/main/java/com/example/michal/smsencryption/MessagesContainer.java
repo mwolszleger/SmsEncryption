@@ -16,21 +16,24 @@ public final class MessagesContainer {
     private static MessageReceivedListener messageReceivedListener;
     public static ArrayList<Message> messages = new ArrayList<Message>();
     public static ArrayList<String> authors=new ArrayList<>();
-    public static ArrayList<String> texts=new ArrayList<>();
+
     public static void add(String text,String author) {
-
-
-
-
         messages.add(new Message(text,author));
         authors.add(author);
-        texts.add(text);
+
         try {
-            handleNewMessage(text, author);
+            handleNewMessage();
         }
         catch(Exception e){}
 
 
+    }
+    public static void delete(int i,Context c)
+    {
+        messages.remove(i);
+        authors.remove(i);
+        SharedPreferencesHandling.delete(i,c);
+        handleNewMessage();
     }
     public static Message  getMessage(int index)
     {
@@ -40,8 +43,8 @@ public final class MessagesContainer {
 
 
 
-    private static void handleNewMessage(String text,String author) {
-        messageReceivedListener.onMessageReceived(text,author);
+    private static void handleNewMessage() {
+        messageReceivedListener.onMessageReceived();
     }
     public static void setOnNewMessageReceivedListener(MessageReceivedListener listener) {
         messageReceivedListener=listener;

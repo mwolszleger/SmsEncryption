@@ -39,12 +39,14 @@ public class MessagesActivity extends AppCompatActivity {
 
                 Intent conversation = new Intent(MessagesActivity.this,ReceivedMessage.class);
                 conversation.putExtra("TEXT", MessagesContainer.getMessage(i).getText());
+                conversation.putExtra("AUTHOR", MessagesContainer.getMessage(i).getAuthor());
+                conversation.putExtra("INDEX", i);
                 startActivity(conversation);
             }
         });
         MessagesContainer.setOnNewMessageReceivedListener(new MessageReceivedListener() {
             @Override
-            public void onMessageReceived(final String text,final String author) {
+            public void onMessageReceived() {
                 MessagesActivity.this.runOnUiThread(new Runnable() {
 
                     @Override

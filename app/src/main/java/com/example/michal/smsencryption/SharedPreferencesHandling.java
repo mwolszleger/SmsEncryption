@@ -31,18 +31,33 @@ public static void read(Context arg0)
                 String author=sharedPref2.getString(Integer.toString(index),"");
                 MessagesContainer.add(message,author);
                 counter++;
-
             }
             index++;
-
-
-
         }
+    }
+}
+    public static void delete(int i,Context arg0)
+    {
+        SharedPreferences sharedPref = arg0.getSharedPreferences("messages", 0);
+        SharedPreferences sharedPref2 = arg0.getSharedPreferences("authors", 0);
+        int length = sharedPref.getAll().size();
+        int index = -1;
+        int counter = 0;
+        while (counter < i)
+        {
+            index++;
+            if(sharedPref.contains(Integer.toString(index)))
+            {
+                counter++;
+            }
+        }
+        SharedPreferences.Editor mEditor = sharedPref.edit();
+        mEditor.remove(Integer.toString(index)).commit();
 
+        SharedPreferences.Editor mEditor2 = sharedPref2.edit();
+        mEditor2.remove(Integer.toString(index)).commit();
 
     }
-
-}
     public static void save(String message,String author,Context arg0)
     {
 

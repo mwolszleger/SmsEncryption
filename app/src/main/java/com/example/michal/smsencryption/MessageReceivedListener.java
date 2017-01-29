@@ -6,5 +6,5 @@ package com.example.michal.smsencryption;
 
 public interface MessageReceivedListener {
 
-    void onMessageReceived(String text,String author);
+    void onMessageReceived();
 }
