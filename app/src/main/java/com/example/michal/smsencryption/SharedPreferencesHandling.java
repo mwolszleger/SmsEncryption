@@ -43,7 +43,7 @@ public static void read(Context arg0)
         int length = sharedPref.getAll().size();
         int index = -1;
         int counter = 0;
-        while (counter < i)
+        while (counter <= i)
         {
             index++;
             if(sharedPref.contains(Integer.toString(index)))
